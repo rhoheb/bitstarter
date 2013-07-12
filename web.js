@@ -5,7 +5,7 @@ var app = express.createServer(express.logger());
 
 var buf = new Buffer(100);
 
-buf.write(fs.readFileSync(infile), "utf-8");
+buf.write(fs.readFileSync(infile), 'utf-8');
 
 app.get('/', function(request, response) {
   response.send(buf.toString('utf-8'));
