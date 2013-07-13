@@ -75,13 +75,7 @@ var download = function(url, callback) {
         callback(null, result);
     });
 }
-
-var check = function(err, html) {
-        if (err) {
-            console.log('Error getting html: ' + err);
-            process.exit(1);
-        }
-}
+ 
 
 if(require.main == module) {
     program
@@ -89,9 +83,13 @@ if(require.main == module) {
         .option('-c, --checks <check_file>', 'Path to checks.json', clone(assertFileExists), CHECKSFILE_DEFAULT)
         .option('-u, --url <url>', 'Path to downloaded url')
         .parse(process.argv);
-    var checkJson = checkHtmlFile(program.file, program.checks);
-    var outJson = JSON.stringify(checkJson, null, 4);
-    console.log(outJson);
+
+    var check = function(err, html) {
+        if (err) {
+            console.log('Error getting html: ' + err);
+            process.exit(1);
+        }
+    }
 
     if (program.url) {
         // download the provided url and then check the html
@@ -100,6 +98,10 @@ if(require.main == module) {
         // load html from a file and then check it
         fs.readFile(program.file, check);
     }
+
+    var checkJson = checkHtmlFile(program.file, program.checks);
+    var outJson = JSON.stringify(checkJson, null, 4);
+    console.log(outJson);
 
 } else {
     exports.checkHtmlFile = checkHtmlFile;
